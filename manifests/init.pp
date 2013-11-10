@@ -11,6 +11,8 @@
 #
 class cinder (
 
+  $extra_package_name        = $cinder::params::extra_package_name,
+
   $package_name              = $cinder::params::package_name,
   $package_ensure            = 'present',
 
@@ -83,6 +85,12 @@ class cinder (
 
   if $cinder::package_name {
     package { $cinder::package_name:
+      ensure   => $cinder::package_ensure,
+    }
+  }
+
+  if $cinder::extra_package_name {
+    package { $cinder::extra_package_name:
       ensure   => $cinder::package_ensure,
     }
   }

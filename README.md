@@ -105,6 +105,20 @@ The module provides also a generic define to manage any cinder configuration fil
         }
 
 
+* Install extra packages (clients, plugins...). Can be an array. Default: client package.
+
+        class { 'cinder':
+          extra_package_name    => [ 'python-cinder' , 'python-keystoneclient' ],
+        }
+
+
+* Use the additional example42 subclass for puppi extensions
+
+        class { 'cinder':
+          my_class => 'cinder::example42'
+        }
+
+
 ##Operating Systems Support
 
 This is tested on these OS:

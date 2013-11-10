@@ -4,6 +4,10 @@
 #
 class cinder::params {
 
+  $extra_package_name = $::osfamily ? {
+    default  => 'python-cinder',
+  }
+
   $package_name = $::osfamily ? {
     'Redhat' => 'openstack-cinder',
     default  => 'cinder',
