@@ -5,11 +5,13 @@
 class cinder::params {
 
   $package_name = $::osfamily ? {
-    default => 'cinder',
+    'Redhat' => 'openstack-cinder',
+    default  => 'cinder',
   }
 
   $service_name = $::osfamily ? {
-    default => 'cinder',
+    'Redhat' => 'openstack-cinder',
+    default  => 'cinder',
   }
 
   $config_file_path = $::osfamily ? {
