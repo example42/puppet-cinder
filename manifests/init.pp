@@ -143,7 +143,7 @@ class cinder (
   if $cinder::monitor_class {
     class { $cinder::monitor_class:
       options_hash => $cinder::monitor_options_hash,
-      scope_hash   => {}, # TODO: Find a good way to inject class' scope
+      scope_hash   => {}, # TODO: Find a good way to inject class' scope
     }
   }
 
