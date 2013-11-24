@@ -11,7 +11,8 @@
 #
 class cinder (
 
-  $extra_package_name        = $cinder::params::extra_package_name,
+  $conf_hash                 = undef,
+  $generic_service_hash      = undef,
 
   $package_name              = $cinder::params::package_name,
   $package_ensure            = 'present',
@@ -23,7 +24,7 @@ class cinder (
   $config_file_path          = $cinder::params::config_file_path,
   $config_file_replace       = $cinder::params::config_file_replace,
   $config_file_require       = 'Package[cinder]',
-  $config_file_notify        = 'Service[cinder]',
+  $config_file_notify        = 'class_default',
   $config_file_source        = undef,
   $config_file_template      = undef,
   $config_file_content       = undef,
@@ -66,7 +67,11 @@ class cinder (
 
   $manage_config_file_content = default_content($config_file_content, $config_file_template)
 
-  $manage_config_file_notify = pickx($config_file_notify)
+  $manage_config_file_notify  = $config_file_notify ? {
+    'class_default' => undef,
+    ''              => undef,
+    default         => $config_file_notify,
+  }
 
   if $package_ensure == 'absent' {
     $manage_service_enable = undef
@@ -84,21 +89,9 @@ class cinder (
   # Resources managed
 
   if $cinder::package_name {
-    package { $cinder::package_name:
+    package { 'cinder':
       ensure   => $cinder::package_ensure,
-    }
-  }
-
-  if $cinder::extra_package_name {
-    package { $cinder::extra_package_name:
-      ensure   => $cinder::package_ensure,
-    }
-  }
-
-  if $cinder::service_name {
-    service { $cinder::service_name:
-      ensure     => $cinder::manage_service_ensure,
-      enable     => $cinder::manage_service_enable,
+      name     => $cinder::package_name,
     }
   }
 
@@ -124,13 +117,29 @@ class cinder (
       recurse => $cinder::config_dir_recurse,
       purge   => $cinder::config_dir_purge,
       force   => $cinder::config_dir_purge,
-      notify  => $cinder::config_file_notify,
+      notify  => $cinder::manage_config_file_notify,
       require => $cinder::config_file_require,
+    }
+  }
+
+  if $cinder::service_name {
+    service { 'cinder':
+      ensure     => $cinder::manage_service_ensure,
+      name       => $cinder::service_name,
+      enable     => $cinder::manage_service_enable,
     }
   }
 
 
   # Extra classes
+  if $conf_hash {
+    create_resources('cinder::conf', $conf_hash)
+  }
+
+  if $generic_service_hash {
+    create_resources('cinder::generic_service', $generic_service_hash)
+  }
+
 
   if $cinder::dependency_class {
     include $cinder::dependency_class

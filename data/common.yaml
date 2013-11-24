@@ -1,0 +1,8 @@
+---
+package_name: 'cinder'
+service_name: 'cinder'
+config_file_path:  '/etc/cinder/cinder.conf'
+config_file_mode: '0644'
+config_file_owner: 'root'
+config_file_group: 'root'
+config_dir_path: '/etc/cinder'
