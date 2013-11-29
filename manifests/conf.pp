@@ -70,7 +70,7 @@ define cinder::conf (
   include cinder
 
   $manage_path    = pickx($path, "${cinder::config_dir_path}/${name}")
-  $manage_content = choose_default($content, $template)
+  $manage_content = default_content($content, $template)
   $manage_mode    = pickx($mode, $cinder::config_file_mode)
   $manage_owner   = pickx($owner, $cinder::config_file_owner)
   $manage_group   = pickx($group, $cinder::config_file_group)
