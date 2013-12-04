@@ -26,11 +26,11 @@ class cinder::params {
   }
 
   $config_file_owner = $::osfamily ? {
-    default => 'root',
+    default => 'cinder',
   }
 
   $config_file_group = $::osfamily ? {
-    default => 'root',
+    default => 'cinder',
   }
 
   $config_dir_path = $::osfamily ? {
